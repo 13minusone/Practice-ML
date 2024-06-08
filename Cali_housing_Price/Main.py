@@ -9,7 +9,7 @@ from compute_cost import compute_cost
 
 
 # Define the column names 
-Data = pd.read_csv("housing_price_dataset.csv");
+Data = pd.read_csv("C:\Project\Kaggle\Cali_housing_Price\housing_price_dataset.csv");
 y = Data['Price'];
 X = Data.drop(columns= ['Price','Neighborhood','Bathrooms']);
 Dx = X.to_numpy(dtype= np.float64);
@@ -29,25 +29,22 @@ for i in range(0,len(Dx)):
             Dx[i][j] = Dx[i][j] * Dx[i][j];
         if j == 2:
             Dx[i][j] = Dx[i][j] * Dx[i][j] * Dx[i][j];
-X_train, X_test, y_train, y_test = train_test_split(Dx, Dy, test_size=0.95, random_state=42);
-print(X_train.shape[0]);
-w = np.array([0,0,0], dtype = np.float64);
+X_train, X_test, y_train, y_test = train_test_split(Dx, Dy, test_size=0.2, random_state=42);
+w = (np.random.rand(X.shape[1])*0.01).reshape(X.shape[1],1);
+y_train = y_train.reshape(len(y_train),1);
+y_test = y_test.reshape(len(y_test),1);
+
 b = 0;
-eta = 100;
-print(Dx);
+eta = 2;  
 Lamda = 0.7;
 ###
 (w,b, cost_history) = Grad_de(X_train, y_train, X_test, y_test, w, eta, b, Lamda);
 ###
-plt.scatter(X_train[:,0], y_train, alpha=0.5, label='Data points');
 plt.figure()
-plt.plot(range(1000), cost_history, label='Cost Function')
+plt.plot(range(500), cost_history, label='Cost Function')
 plt.xlabel('Iterations')
 plt.ylabel('Cost')
 plt.title('Gradient Descent for Linear Regression')
 plt.legend()
 plt.show();
-
-print(w);
-print(b);
 print(compute_cost(X_test, y_test, w, b));
